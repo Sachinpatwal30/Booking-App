@@ -1,0 +1,47 @@
+@import "../../variables";
+
+.navbar {
+
+    height: 50px;
+    background-color: #003580;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+
+    .navContainer {
+
+        width: 100%;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+
+
+
+        .logo {
+            font-weight: 600;
+            font-size: 22px;
+            margin-right: 50px;
+            margin-left: 350px;
+        }
+
+        .navItems {
+
+            margin-right: 370px;
+
+            .navButton {
+
+                margin: auto 15px;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                color: $main-color;
+                
+                
+
+            }
+        }
+    }
+}
