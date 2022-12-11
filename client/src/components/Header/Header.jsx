@@ -87,7 +87,8 @@ export default function Header({ type }) {
             </div>
 
             {!(type === "list") && <>   <h1 className="headerTitle">A lifetime of discount. It's a Genius</h1>
-               <p className="headerDesc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint esse numquam repellendus illum, aliquid in ea harum, illo odio quo quae unde. Eaque iure, modi beatae vero aperiam nemo ullam.</p>
+               <p className="headerDesc"> Get rewarded for your travels – unlock instant savings of 10% or
+              more with a free Lamabooking account.</p>
 
                <button className="headerBtn">Sign In / Register</button>
 
@@ -99,7 +100,7 @@ export default function Header({ type }) {
                      <input type="text" className="headerSearchInput" onChange={(e) => { setDestination(e.target.value) }} placeholder='Where are you going ?' />
                   </div>
 
-                  <div className="headerSearchItem" onClick={() => { setOpenDate(!openDate) }}>
+                  <div className="headerSearchItem" onClick={() => { setOpenDate(!openDate); setOpenOptions(false); }}>
                      <CalendarMonth className='headerIcon' />
                      <span className="headerSearchText"  >{`${format(date[0].startDate, 'dd-MM-yyyy')} to ${format(date[0].endDate, 'dd-MM-yyyy')}`}</span>
                      {openDate && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])}
@@ -107,7 +108,7 @@ export default function Header({ type }) {
                   </div>
                   <div className="headerSearchItem" >
                      <PeopleOutline className='headerIcon' />
-                     <span onClick={() => { setOpenOptions(!openOptions) }} className="headerSearchText">{`${persons.adult} Adults · ${persons.children} Children · ${persons.room} Room`} </span>
+                     <span onClick={() => { setOpenOptions(!openOptions); setOpenDate(false); }} className="headerSearchText">{`${persons.adult} Adults · ${persons.children} Children · ${persons.room} Room`} </span>
                      {openOptions && <div className="options">
 
                         <div className="optionItem">

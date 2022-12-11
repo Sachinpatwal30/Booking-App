@@ -7,7 +7,7 @@ export default function Navbar() {
 
         <div className="navContainer">
 
-            <span className="logo">Logo</span>
+            <span className="logo">Booking.com</span>
 
             <div className="navItems">
                 <button className="navButton">Register</button>

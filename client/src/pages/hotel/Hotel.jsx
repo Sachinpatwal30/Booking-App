@@ -1,4 +1,4 @@
-import { LocationOn } from '@mui/icons-material';
+import { ArrowCircleLeft, ArrowCircleRight, Cancel, LocationOn } from '@mui/icons-material';
 import React, { useState } from 'react';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/Header/Header';
@@ -8,6 +8,10 @@ import "./hotel.css";
 import Carousel from 'react-bootstrap/Carousel';
 
 export default function Hotel() {
+
+  const [slideNumber, setSlideNumber] = useState(0);
+  const [openSlider, setOpenSlider] = useState(false);
+
 
   const photos = [
     {
@@ -36,11 +40,57 @@ export default function Hotel() {
     setIndex(selectedIndex);
   };
 
+  const handleClick = (index) => {
+
+
+    setOpenSlider(true);
+    setSlideNumber(index);
+
+
+  };
+
+  const moveSlide = (direction) => {
+
+
+    
+    if(direction==="left") setSlideNumber( (slideNumber ===0) ? 5: slideNumber - 1  );
+    else
+    setSlideNumber( (slideNumber ===5) ? 0: slideNumber + 1  );
+
+
+
+
+
+  };
+
+
+
+
+
   return (
     <div className='hotel'>
 
       <Navbar />
       <Header type="list" />
+
+
+      {openSlider && <div className="slider">
+
+        <Cancel className='close' onClick={()=>{setOpenSlider(false)}} />
+        <ArrowCircleLeft className='arrow left' onClick={()=>{moveSlide("left")}}  />
+
+
+        <div className="sliderWrapper">
+          <img src={photos[slideNumber].src} alt="slider img" className='sliderImg' />
+        </div>
+
+        <ArrowCircleRight className='arrow right' onClick={()=>{moveSlide("right")}} />
+
+      </div>
+      }
+
+
+
 
       <div className="hotelContainer">
 
@@ -58,55 +108,10 @@ export default function Hotel() {
             {
               photos.map((photo, i) => {
                 return <div key={i} className="hotelImgWrapper">
-                  <img src={photo.src} alt="" className="hotelImg" />
+                  <img src={photo.src} alt="" className="hotelImg" onClick={() => { handleClick(i) }} />
                 </div>
 
               })}
-
-            <Carousel activeIndex={index} onSelect={handleSelect}>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1"
-                  alt="First slide"
-                />
-                <Carousel.Caption>
-                  <h3>First slide label</h3>
-                  <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1"
-                  alt="Second slide"
-                />
-
-                <Carousel.Caption>
-                  <h3>Second slide label</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1"
-                  alt="Third slide"
-                />
-
-                <Carousel.Caption>
-                  <h3>Third slide label</h3>
-                  <p>
-                    Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                  </p>
-                </Carousel.Caption>
-              </Carousel.Item>
-            </Carousel>
-
-
-
-
-
 
           </div>
 
