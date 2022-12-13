@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { format } from "date-fns";
 import { DateRange } from 'react-date-range';
 import SearchItem from '../../components/searchItem/SearchItem';
+import useFetch from "../../hooks/useFetch";
 
 export default function List() {
 
@@ -14,10 +15,10 @@ export default function List() {
 
   const [destination, setDestination] = useState(location.state.destination);
   const [persons, setPersons] = useState(location.state.persons);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
-
-  console.log(location);
+  const [min, setMin]= useState(0);
+  const [max, setMax]= useState(1000);
 
   const [state, setState] = useState([
     {
@@ -28,6 +29,15 @@ export default function List() {
   ]);
 
 
+  const { data, loading, error, reFetch } = useFetch(`/hotels?city=${destination}&min=${min}&max=${max}`);
+
+  const handleSearch = ()=>{
+
+    reFetch();
+
+
+  }
+  
 
 
 
@@ -47,17 +57,17 @@ export default function List() {
 
             <div className="lsItem">
               <label >Destination</label>
-              <input type="text" placeholder={destination} />
+              <input onChange={(e)=>{setDestination(e.target.value)}} type="text" placeholder={destination} />
             </div>
 
             <div className="lsItem" onClick={() => { setOpenDate(!openDate) }}>
               <label >Check In Dates</label>
-              <span>{`${format(date[0].startDate, 'dd-MM-yyyy')} to ${format(date[0].endDate, 'dd-MM-yyyy')}`}</span>
+              <span>{`${format(dates[0].startDate, 'dd-MM-yyyy')} to ${format(dates[0].endDate, 'dd-MM-yyyy')}`}</span>
               {openDate && <DateRange
                 editableDateInputs={true}
-                onChange={item => setDate([item.selection])}
+                onChange={item => setDates([item.selection])}
                 moveRangeOnFirstSelection={false}
-                ranges={date}
+                ranges={dates}
                 minDate={new Date()}
                 className="date"
               />}
@@ -72,12 +82,12 @@ export default function List() {
 
                 <div className="lsOptionItem">
                   <span className='isOptionText'>Min Price <small>(per night)</small> </span>
-                  <input type="text" className="lsOptionInput" />
+                  <input type="text" onChange={(e)=>(setMin(e.target.value))} className="lsOptionInput" />
                 </div>
 
                 <div className="lsOptionItem">
                   <span className='isOptionText'>Max Price <small>(per night)</small> </span>
-                  <input type="text" className="lsOptionInput" />
+                  <input type="text" onChange={(e)=>(setMax(e.target.value))} className="lsOptionInput" />
                 </div>
 
                 <div className="lsOptionItem">
@@ -100,56 +110,28 @@ export default function List() {
             </div>
 
 
-    <button >Search</button>
+            <button onClick={handleSearch} >Search</button>
 
           </div>
           <div className="listResults">
 
 
             <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
-   <SearchItem />
 
+            {
+              loading ? "Loading Please Wait.." : <>
 
+                {  data.map((item) => {
 
+                  return <SearchItem item={item} key={item._id} />
 
-
-
-
+                })}
+              </>
+            }
 
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
-
-
-
-
       </div>
-
-
-
-
     </div>
   )
 }

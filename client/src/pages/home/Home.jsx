@@ -1,6 +1,6 @@
 import React from 'react'
 import Featured from '../../components/Featured/Featured'
-import FeaturedProperies from '../../components/featuredProperties/FeaturedProperies'
+import FeaturedProperties from '../../components/featuredProperties/FeaturedProperties'
 import Footer from '../../components/footer/Footer'
 import Header from '../../components/Header/Header'
 import MailList from '../../components/mailList/MailList'
@@ -17,17 +17,15 @@ export default function Home() {
 
           <div className="homeContainer">
 
-
             <Featured/>
             
             <h1 className="homeTitle">Browse by Property type</h1>
 
             <PropertyList/>
 
-                 
             <h1 className="homeTitle">Homes Guests love</h1>
 
-            <FeaturedProperies/>
+            <FeaturedProperties/>
 
             <MailList/>
 

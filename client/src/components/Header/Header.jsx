@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import "./header.css";
 import { Attractions, CalendarMonth, DirectionsCar, Flight, Hotel, LocalTaxi, PeopleOutline } from '@mui/icons-material';
 import { DateRange } from "react-date-range";
@@ -6,12 +6,13 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { SearchContext } from '../../context/SearchContext/SearchContext';
 
 export default function Header({ type }) {
 
    const [destination, setDestination] = useState("");
    const [openDate, setOpenDate] = useState(false);
-   const [date, setDate] = useState([
+   const [dates, setDates] = useState([
       {
          startDate: new Date(),
          endDate: new Date(),
@@ -21,7 +22,6 @@ export default function Header({ type }) {
 
    const [openOptions, setOpenOptions] = useState(false)
    const [persons, setPersons] = useState({
-
       adult: 1,
       children: 0,
       room: 1
@@ -29,22 +29,20 @@ export default function Header({ type }) {
 
 
    const handleClick = (e) => {
-
       const name = e.target.name;
       const value = e.target.value;
-
       setPersons((prev) => {
-
-
          return { ...prev, [name]: (value === "inc") ? prev[name] + 1 : prev[name] - 1 }
-
       })
    }
 
+   
    const navigate = useNavigate();
+   const {dispatch}= useContext(SearchContext);
    const handleSubmit = () => {
 
-      navigate("/hotels", { state: { date, persons, destination } });
+      dispatch({type:"NEW_SEARCH",payload:{city:destination, dates, persons}})
+      navigate("/hotels", { state: { dates, persons, destination } });
 
    }
 
@@ -102,9 +100,9 @@ export default function Header({ type }) {
 
                   <div className="headerSearchItem" onClick={() => { setOpenDate(!openDate); setOpenOptions(false); }}>
                      <CalendarMonth className='headerIcon' />
-                     <span className="headerSearchText"  >{`${format(date[0].startDate, 'dd-MM-yyyy')} to ${format(date[0].endDate, 'dd-MM-yyyy')}`}</span>
-                     {openDate && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])}
-                        moveRangeOnFirstSelection={false} ranges={date} className="date"   minDate={new Date()} />}
+                     <span className="headerSearchText"  >{`${format(dates[0].startDate, 'dd-MM-yyyy')} to ${format(dates[0].endDate, 'dd-MM-yyyy')}`}</span>
+                     {openDate && <DateRange editableDateInputs={true} onChange={item => setDates([item.selection])}
+                        moveRangeOnFirstSelection={false} ranges={dates} className="date"   minDate={new Date()} />}
                   </div>
                   <div className="headerSearchItem" >
                      <PeopleOutline className='headerIcon' />
