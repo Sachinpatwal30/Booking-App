@@ -1,11 +1,13 @@
 import { ArrowCircleLeft, ArrowCircleRight, Cancel, LocationOn } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/Header/Header';
 import MailList from '../../components/mailList/MailList';
 import Navbar from '../../components/navbar/Navbar';
+import Reserve from '../../components/reserve/Reserve';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
 import { SearchContext } from '../../context/SearchContext/SearchContext';
 import useFetch from "../../hooks/useFetch";
 import "./hotel.css";
@@ -15,60 +17,52 @@ export default function Hotel() {
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [openSlider, setOpenSlider] = useState(false);
-
+  const [openModal, setOpenModal] = useState(false);
   const location = useLocation()
-  const hotelId= location.pathname.split("/")[2];
-  console.log(hotelId);
+  const hotelId = location.pathname.split("/")[2];
+  const { data } = useFetch(`/hotels/find/${hotelId}`);
+  const { dates, persons } = useContext(SearchContext);
+  const days = (dates[0].endDate.getDate() === dates[0].startDate.getDate()) ? 1 : dates[0].endDate.getDate() - dates[0].startDate.getDate();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
 
-  const { data, loading, error } = useFetch(`/hotels/find/${hotelId}`);
-  const {dates,persons}= useContext(SearchContext);
-
-  console.log("persons are",persons)
-  console.log("dates are ",dates);
-  const days= (dates[0].endDate.getDate()=== dates[0].startDate.getDate()) ? 1 : dates[0].endDate.getDate()-dates[0].startDate.getDate();
-
-  console.log("No of days ",days );
-  
-
-
-
-
-
-
-
- 
-  const handleClick = (index) => {
+  const handleOpen = (index) => {
     setOpenSlider(true);
     setSlideNumber(index);
   };
 
   const moveSlide = (direction) => {
-    
-    if(direction==="left") setSlideNumber( (slideNumber ===0) ? 5: slideNumber - 1  );
+
+    if (direction === "left") setSlideNumber((slideNumber === 0) ? 5 : slideNumber - 1);
     else
-    setSlideNumber( (slideNumber ===5) ? 0: slideNumber + 1  );
+      setSlideNumber((slideNumber === 5) ? 0 : slideNumber + 1);
 
   };
+
+
 
   return (
     <div className='hotel'>
 
       <Navbar />
       <Header type="list" />
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={hotelId} />
+
+      }
 
 
       {openSlider && <div className="slider">
 
-        <Cancel className='close' onClick={()=>{setOpenSlider(false)}} />
-        <ArrowCircleLeft className='arrow left' onClick={()=>{moveSlide("left")}}  />
+        <Cancel className='close' onClick={() => { setOpenSlider(false) }} />
+        <ArrowCircleLeft className='arrow left' onClick={() => { moveSlide("left") }} />
 
 
         <div className="sliderWrapper">
           <img src="" alt="slider img" className='sliderImg' />
         </div>
 
-        <ArrowCircleRight className='arrow right' onClick={()=>{moveSlide("right")}} />
+        <ArrowCircleRight className='arrow right' onClick={() => { moveSlide("right") }} />
 
       </div>
       }
@@ -80,7 +74,7 @@ export default function Hotel() {
 
         <div className="hotelWrapper">
 
-          <button className='bookNow'>Reserve or Book Now!</button>
+          <button className='bookNow' onClick={()=>{setOpenModal(true);}} >Reserve or Book Now!</button>
           <h1 className="hotelTitle"> {data.name}</h1>
           <div className="hotelAddress">   <LocationOn />  <span>{data.address}</span> </div>
 
@@ -89,16 +83,16 @@ export default function Hotel() {
 
           <div className="hotelImages">
 
-          {data.photos?.map((photo, i) => (
-                <div className="hotelImgWrapper" key={i}>
-                  <img
-                    
-                    src={photo}
-                    alt=""
-                    className="hotelImg"
-                  />
-                </div>
-              ))}
+            {data.photos?.map((photo, i) => (
+              <div className="hotelImgWrapper" key={i}>
+                <img
+                  onClick={handleOpen}
+                  src={photo}
+                  alt=""
+                  className="hotelImg"
+                />
+              </div>
+            ))}
 
           </div>
 
@@ -116,11 +110,11 @@ export default function Hotel() {
               <span>
                 Located in the real heart of Krakow, this property has an
                 excellent location score of 9.8!
-              </span> 
+              </span>
               <h2>
-                <b>Rs {days* data.cheapestPrice * persons.room}</b> ({days} nights)
+                <b>Rs {days * data.cheapestPrice * persons.room}</b> ({days} nights)
               </h2>
-              <button>Reserve or Book Now!</button>
+              <button onClick={()=>{setOpenModal(true);}}>Reserve or Book Now!</button>
 
             </div>
           </div>

@@ -11,7 +11,6 @@ const Login = () => {
     });
 
     const { loading, error, dispatch } = useContext(AuthContext);
-
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -24,11 +23,11 @@ const Login = () => {
         try {
             const res = await axios.post("/auth/login", credentials);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-            navigate("/")
+            navigate(1);
         } catch (err) {
 
             console.log("inside failure & error is ",err.response.data.errorMessage);
-            dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
+            dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });    
         }
     };
 

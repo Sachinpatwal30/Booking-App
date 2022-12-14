@@ -3,8 +3,8 @@ import useFetch from '../../hooks/useFetch';
 import "./propertyList.css";
 export default function PropertyList() {
 
-    const { data, loading, error } = useFetch("/hotels/countByType");
-    console.log("data", data);
+    const { data, loading } = useFetch("/hotels/countByType");
+   
 
 
 

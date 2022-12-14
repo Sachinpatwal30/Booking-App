@@ -18,9 +18,9 @@ function App() {
       <Router>
         <Routes>
 
-        <Route path="/"  element={ user ?  <Home />: <Login/> } />
-        <Route path="/hotels" element={ user?  <List /> : <Login/> } />
-        <Route path="/hotels/:id" element={ user ? <Hotel /> : <Login/>  } />
+        <Route path="/"  element={  <Home /> } />
+        <Route path="/hotels" element={   <List />  } />
+        <Route path="/hotels/:id" element={  <Hotel />  } />
         <Route path="/login" element={<Login/>}  />
 
         </Routes>

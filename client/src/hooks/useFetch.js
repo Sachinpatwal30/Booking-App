@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useFetch = (url) => {
 
-    console.log("inside use fetch", url);
+  
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
